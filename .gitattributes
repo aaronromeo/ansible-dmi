@@ -1,2 +1,1 @@
-files/environment_vars.key filter=git-crypt diff=git-crypt
-
+files/vars.secure filter=git-crypt diff=git-crypt
