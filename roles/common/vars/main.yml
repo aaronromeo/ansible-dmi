@@ -1,0 +1,12 @@
+---
+system_packages_common:
+  - build-essential
+  - git
+  - libevent-dev
+  - libpq-dev
+  - python-dev
+  - python-setuptools
+  - postfix
+python_packages:
+  - pip
+  - virtualenv

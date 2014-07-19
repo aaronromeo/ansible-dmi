@@ -1,0 +1,6 @@
+---
+system_packages_web:
+  - nginx
+python_packages:
+  - pip
+  - virtualenv

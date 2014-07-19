@@ -1,0 +1,9 @@
+---
+- name: Install required system packages.
+  apt: pkg={{ item }} state=installed update-cache=yes
+  sudo: true
+  with_items: system_packages_web
+
+- name: Install required Python packages.
+  easy_install: name={{ item }}
+  with_items: python_packages
