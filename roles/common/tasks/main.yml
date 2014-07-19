@@ -3,3 +3,5 @@
   apt: pkg={{ item }} state=installed update-cache=yes
   sudo: true
   with_items: system_packages_common
+  tags:
+    - server-provision

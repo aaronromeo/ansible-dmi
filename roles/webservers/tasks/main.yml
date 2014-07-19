@@ -3,7 +3,66 @@
   apt: pkg={{ item }} state=installed update-cache=yes
   sudo: true
   with_items: system_packages_web
+  tags:
+    - server-provision
 
 - name: Install required Python packages.
   easy_install: name={{ item }}
   with_items: python_packages
+  tags:
+    - server-provision
+
+- name: Setup required required web dirs
+  sudo: true
+  file:
+    state: directory 
+    path: "{{ src_root }}/{{ item.projectname }}"
+  with_items: projects
+  tags:
+    - server-provision
+
+- name: Update file permissions
+  sudo: true
+  file: 
+    path: "{{ src_root }}/{{ item.projectname }}"
+    owner: deploy
+  with_items: projects
+  tags:
+    - server-provision
+
+- name: Remove sites-available from Nginx
+  sudo: true
+  file:
+    path: /etc/nginx/sites-available
+    state: absent
+  tags: 
+    - server-provision
+
+- name: Remove default Nginx site
+  sudo: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  tags: 
+    - server-provision
+    - debug
+
+- name: Create nginx log directories
+  file:
+    path: /data/log/web/
+    state: directory
+  sudo: yes
+  tags: 
+    - server-provision
+
+- name: Checkout repos
+  git:
+    repo: "{{ item.src }}"
+    dest: "{{ src_root }}/{{ item.projectname }}"
+    force: no
+    update: true
+    accept_hostkey: yes
+  with_items: projects
+  tags:
+    - git-update
+    - deploy
