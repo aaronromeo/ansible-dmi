@@ -1,0 +1,58 @@
+---
+- name: Checkout repos
+  git:
+    repo: "{{ item.src }}"
+    dest: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
+    force: no
+    update: true
+    accept_hostkey: yes
+  with_items: projects
+  tags:
+    - git-update
+    - deploy
+
+- name: Enable git-crypt for repos
+  command: git-crypt init /home/deploy/.ssh/id_rsa
+  args:
+    chdir: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
+  with_items: projects
+  tags:
+    - git-update
+
+- name: stop supervisor
+  service: name=supervisor state=restarted
+  sudo: true
+
+- name: Copy gunicorn project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/gunicorn.conf /etc/supervisor/conf.d/{{ item.projectname }}.conf
+  with_items: projects
+  sudo: true
+  notify: restart supervisor
+  tags:
+    - supervisor
+
+- name: stop nginx
+  service: name=nginx state=reloaded
+  sudo: true
+
+- name: Copy nginx project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx.conf /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - nginx
+
+- name: Install repos requirements
+  pip: requirements={{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/requirements.txt virtualenv={{ src_root }}/venv_{{ item.projectname }}
+  with_items: projects
+  tags:
+    - deploy
+
+- name: XXX
+  django_manage: >
+      command=sqlcreate
+      app_path={{ django_dir }}
+      settings={{ settings_app_name }}
+      pythonpath={{ settings_dir }}
+      virtualenv={{ virtualenv_dir }}

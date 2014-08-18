@@ -13,56 +13,75 @@
     - server-provision
 
 - name: Setup required required web dirs
-  sudo: true
   file:
     state: directory 
-    path: "{{ src_root }}/{{ item.projectname }}"
+    path: "{{ src_root }}/venv_{{ item.projectname }}"
   with_items: projects
+  sudo: true
   tags:
     - server-provision
 
 - name: Update file permissions
-  sudo: true
   file: 
-    path: "{{ src_root }}/{{ item.projectname }}"
+    path: "{{ src_root }}/venv_{{ item.projectname }}"
     owner: deploy
   with_items: projects
+  sudo: true
   tags:
     - server-provision
 
 - name: Remove sites-available from Nginx
-  sudo: true
   file:
     path: /etc/nginx/sites-available
     state: absent
+  sudo: true
   tags: 
     - server-provision
 
 - name: Remove default Nginx site
-  sudo: true
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
+  sudo: true
   tags: 
     - server-provision
-    - debug
 
 - name: Create nginx log directories
   file:
-    path: /data/log/web/
+    path: /data/logs/web/{{ item.projectname }}
     state: directory
-  sudo: yes
+  with_items: projects
+  sudo: true
   tags: 
     - server-provision
 
-- name: Checkout repos
+- name: Checkout git-crypt
   git:
-    repo: "{{ item.src }}"
-    dest: "{{ src_root }}/{{ item.projectname }}"
+    repo: "git@github.com:AGWA/git-crypt.git"
+    dest: /tmp/git-crypt
     force: no
     update: true
+    version: debian
     accept_hostkey: yes
-  with_items: projects
+  tags: 
+    - server-provision
+
+- name: Make git-crypt
+  command: make
+  args:
+    chdir: /tmp/git-crypt
+  tags: 
+    - server-provision
+
+- name: Copy git-crypt
+  command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt 
+  sudo: true
+  tags: 
+    - server-provision
+
+- name: Copy ssh key for git-crypt
+  copy: src=/Users/aaron/.ssh/id_rsa dest=/home/deploy/.ssh/id_rsa
   tags:
     - git-update
-    - deploy
+
+# Install postfix https://www.ftmon.org/blog/secure-ubuntu-server/#Setup_Email and https://sendgrid.com/docs/Integrate/Mail_Servers/postfix.html

@@ -10,6 +10,6 @@ system_packages_common:
 python_packages:
   - pip
   - virtualenv
-src_root: /opt/myenv
+src_root: /data
 projects:
   - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }

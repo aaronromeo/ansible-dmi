@@ -1,6 +1,10 @@
 ---
 system_packages_web:
   - nginx
+  - git-buildpackage
+  - supervisor
+  - postfix
+  - python-virtualenv
 python_packages:
   - pip
   - virtualenv

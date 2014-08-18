@@ -5,6 +5,32 @@ ansible-dmi
 
 ansible-playbook {{ Playbook Name }}
 
+The two ones here are `db-server.yml` and `web-server.yml`.
+
+### Setting up the hosts for Digital Ocean
+
+* Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet` and `dmi-web-droplet`.
+
+* The hosts are set in `/etc/ansible/hosts`. They are currently set as the following...
+
+        [droplets]
+        dmi-db-droplet
+        dmi-web-droplet
+    
+        [dbservers]
+        dmi-db-droplet
+    
+        [webservers]
+        dmi-web-droplet
+
+* This also requires the setting in `/etc/ansible/group_vars/droplets` 
+
+        ---
+        ansible_ssh_user: {{ the server's ssh user }}
+        
+
+* New projects can be added to the file `roles/common/vars/main.yml` under the variable `projects`
+
 # A few useful things to do when creating a server...
 
 ### Update the default editor so we aren't living in squalor

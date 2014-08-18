@@ -2,4 +2,5 @@
 - hosts: webservers
   remote_user: deploy
   roles:
-    - webservers
+    - django-setup
+    # - django-deploy
