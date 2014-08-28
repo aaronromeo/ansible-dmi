@@ -1,0 +1,3 @@
+---
+dependencies:
+  - { role: django-common, stages: ['post-db-create']}

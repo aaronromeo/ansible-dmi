@@ -1,0 +1,85 @@
+---
+- name: Checkout repos
+  git:
+    repo: "{{ item.src }}"
+    dest: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
+    force: yes
+    update: true
+    accept_hostkey: yes
+  with_items: projects
+  tags:
+    - server-provision
+    - git-update
+    - deploy
+    - fresh_deploy
+
+- name: stop supervisor
+  service: name=supervisor state=restarted
+  sudo: true
+  tags:
+    - server-provision
+
+- name: Copy gunicorn project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/gunicorn.conf /etc/supervisor/conf.d/{{ item.projectname }}.conf
+  with_items: projects
+  sudo: true
+  notify: restart supervisor
+  tags:
+    - server-provision
+    - supervisor
+    - deploy
+
+- name: stop nginx
+  service: name=nginx state=reloaded
+  sudo: true
+  tags:
+    - nginx
+
+- name: Copy nginx project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx.conf /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - nginx
+
+- name: Install repos requirements
+  pip: requirements={{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/requirements.txt virtualenv={{ src_root }}/venv_{{ item.projectname }}
+  with_items: projects
+  tags:
+    - deploy
+    - fresh_deploy
+
+- name: Sync DB
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py syncdb"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+  register: result
+  when: "'post-db-create' in stages"
+  tags:
+    - deploy
+
+- name: Migrate DB
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py migrate"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+  register: result
+  when: "'post-db-create' in stages"
+  tags:
+    - deploy
+
+- name: Collect Static
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py collectstatic --clear --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+  register: result
+  when: "'post-db-create' in stages"
+  tags:
+    - deploy
+
+# supervisorctl reread
+# supervisorctl update
+# supervisorctl start hello

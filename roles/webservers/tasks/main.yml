@@ -82,6 +82,7 @@
 - name: Copy ssh key for git-crypt
   copy: src=/Users/aaron/.ssh/id_rsa dest=/home/deploy/.ssh/id_rsa
   tags:
+    - server-provision
     - git-update
 
 # Install postfix https://www.ftmon.org/blog/secure-ubuntu-server/#Setup_Email and https://sendgrid.com/docs/Integrate/Mail_Servers/postfix.html

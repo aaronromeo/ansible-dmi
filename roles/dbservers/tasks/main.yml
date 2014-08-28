@@ -3,5 +3,23 @@
   apt: pkg={{ item }} state=installed update-cache=yes
   sudo: true
   with_items: system_packages_db
+  when: "'server-provision' in stages"
   tags:
     - server-provision
+
+- name: Copy the sqlcreate file
+  copy: 
+    src: /tmp/{{ item.projectname }}_sqlcreate.txt
+    dest: /tmp/{{ item.projectname }}_sqlcreate.txt
+  with_items: projects
+  when: "'fresh-deploy' in stages"
+  tags:
+    - fresh_deploy
+
+- name: Run the sqlcreate script
+  shell: "cat /tmp/{{ item.projectname }}_sqlcreate.txt | sudo -u postgres psql "
+  sudo: true
+  with_items: projects
+  when: "'fresh-deploy' in stages"
+  tags:
+    - fresh_deploy
