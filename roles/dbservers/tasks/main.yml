@@ -7,11 +7,21 @@
   tags:
     - server-provision
 
+# - name: restart machine
+#   command: shutdown -r now "Ansible updates triggered"
+#   async: 0
+#   poll: 0
+#   ignore_errors: true
+#
+# - name: waiting for server to come back
+#   local_action: wait_for host={{ inventory_hostname }}
+#                 port={{ ansible_ssh_port }} state=started
+#   sudo: false
+#
 - name: Update postgresql conf
   template: src=postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
   sudo: true
-  notify:
-    - restart postgres
+  notify: restart postgres
   when: "'server-provision' in stages"
   tags:
     - server-provision
@@ -20,8 +30,7 @@
   template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf
   sudo: true
   sudo_user: postgres
-  notify:
-    - restart postgres
+  notify: restart postgres
   when: "'server-provision' in stages"
   tags:
     - server-provision

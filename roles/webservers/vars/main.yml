@@ -5,6 +5,7 @@ system_packages_web:
   - supervisor
   - postfix
   - python-virtualenv
+  - postgresql-client-common
 python_packages:
   - pip
   - virtualenv

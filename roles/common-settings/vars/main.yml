@@ -11,7 +11,7 @@ python_packages:
   - pip
   - virtualenv
 src_root: /data
-projects:
-  - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }
 web_server_ip: 10.128.127.115
 db_server_ip: 10.128.126.109
+projects:
+    - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }
