@@ -14,7 +14,7 @@
 
 - name: Setup required required web dirs
   file:
-    state: directory 
+    state: directory
     path: "{{ src_root }}/venv_{{ item.projectname }}"
   with_items: projects
   sudo: true
@@ -22,7 +22,7 @@
     - server-provision
 
 - name: Update file permissions
-  file: 
+  file:
     path: "{{ src_root }}/venv_{{ item.projectname }}"
     owner: deploy
   with_items: projects
@@ -35,7 +35,7 @@
     path: /etc/nginx/sites-available
     state: absent
   sudo: true
-  tags: 
+  tags:
     - server-provision
 
 - name: Remove default Nginx site
@@ -43,8 +43,16 @@
     path: /etc/nginx/sites-enabled/default
     state: absent
   sudo: true
-  tags: 
+  tags:
     - server-provision
+
+- name: Write nginx.conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  sudo: true
+  tags:
+    - server-provision
+  notify:
+    - restart nginx
 
 - name: Create nginx log directories
   file:
@@ -52,7 +60,7 @@
     state: directory
   with_items: projects
   sudo: true
-  tags: 
+  tags:
     - server-provision
 
 - name: Checkout git-crypt
@@ -63,20 +71,20 @@
     update: true
     version: debian
     accept_hostkey: yes
-  tags: 
+  tags:
     - server-provision
 
 - name: Make git-crypt
   command: make
   args:
     chdir: /tmp/git-crypt
-  tags: 
+  tags:
     - server-provision
 
 - name: Copy git-crypt
-  command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt 
+  command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt
   sudo: true
-  tags: 
+  tags:
     - server-provision
 
 - name: Copy ssh key for git-crypt

@@ -36,7 +36,7 @@
     - nginx
 
 - name: Copy nginx project specific configuration file
-  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx.conf /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-enabled.conf /etc/nginx/sites-enabled/{{ item.projectname }}.conf
   with_items: projects
   sudo: true
   notify: restart nginx

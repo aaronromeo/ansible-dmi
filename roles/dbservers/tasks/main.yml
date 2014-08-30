@@ -7,8 +7,27 @@
   tags:
     - server-provision
 
+- name: Update postgresql conf
+  template: src=postgresql.conf.j2 dest=/etc/postgresql/9.3/main/postgresql.conf
+  sudo: true
+  notify:
+    - restart postgres
+  when: "'server-provision' in stages"
+  tags:
+    - server-provision
+
+- name: Update pg_hba conf
+  template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.3/main/pg_hba.conf
+  sudo: true
+  sudo_user: postgres
+  notify:
+    - restart postgres
+  when: "'server-provision' in stages"
+  tags:
+    - server-provision
+
 - name: Copy the sqlcreate file
-  copy: 
+  copy:
     src: /tmp/{{ item.projectname }}_sqlcreate.txt
     dest: /tmp/{{ item.projectname }}_sqlcreate.txt
   with_items: projects

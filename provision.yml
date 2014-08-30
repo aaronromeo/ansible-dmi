@@ -1,10 +1,19 @@
 ---
-- hosts: droplets
+- hosts: dbservers
   remote_user: deploy
   roles:
     - { role: dbservers, stages: ['server-provision'] }
+- hosts: webservers
+  remote_user: deploy
+  roles:
     - { role: django-common, stages:[] }
     - { role: django-setup }
+- hosts: dbservers
+  remote_user: deploy
+  roles:
     - { role: dbservers, stages: ['fresh-deploy'] }
+- hosts: webservers
+  remote_user: deploy
+  roles:
     - { role: django-common, stages: ['post-db-create'] }
     # - django-deploy
