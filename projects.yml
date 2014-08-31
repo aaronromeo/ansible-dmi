@@ -1,6 +1,0 @@
----
-- vars:
-    web_server_ip: 10.128.126.109
-    db_server_ip: 10.128.127.115
-    projects:
-        - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }

@@ -1,14 +1,41 @@
 ---
-- name: Create virtual env directories
-  file:
-    state: directory
-    path: "{{ src_root }}/venv_{{ item.projectname }}"
+- name: Copy gunicorn project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/gunicorn.conf /etc/supervisor/conf.d/{{ item.projectname }}.conf
   with_items: projects
   sudo: true
+  notify: restart supervisor
 
-- name: Update venv file permissions
-  file:
-    path: "{{ src_root }}/venv_{{ item.projectname }}"
-    owner: deploy
+- name: Install repos requirements
+  pip: requirements={{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/requirements.txt virtualenv={{ src_root }}/venv_{{ item.projectname }}
   with_items: projects
-  sudo: true
+
+- name: Create DB
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate --noinput | psql -U postgres -h dmi-dbserver"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+
+- name: Sync DB
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py syncdb --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+
+- name: Migrate DB
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py migrate --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+
+- name: Make Static folder
+  file: dest=/data/venv_breedfeedlaunch/breedfeedlaunch/static state=directory
+
+- name: Collect Static
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py collectstatic --clear --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+
+# supervisorctl reread
+# supervisorctl update
+# supervisorctl start hello

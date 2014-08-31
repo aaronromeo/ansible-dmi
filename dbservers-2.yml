@@ -1,6 +1,0 @@
----
-- hosts: dbservers
-  remote_user: deploy
-  roles:
-    - common
-    - dbservers

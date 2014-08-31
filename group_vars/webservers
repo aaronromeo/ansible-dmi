@@ -6,3 +6,4 @@ system_packages_role_specific:
   - postfix
   - python-virtualenv
   - postgresql-client-common
+  - postgresql-client

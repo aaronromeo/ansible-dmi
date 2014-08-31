@@ -2,4 +2,4 @@
 - hosts: dbservers
   remote_user: deploy
   roles:
-    - dbservers
+    - database-tier

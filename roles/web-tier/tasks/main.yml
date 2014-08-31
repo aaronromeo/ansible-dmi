@@ -1,10 +1,4 @@
 ---
-- name: Install required Python packages.
-  easy_install: name={{ item }}
-  with_items: python_packages
-
 - include: nginx-setup.yml
-
-- include: git-setup.yml
 
 # Install postfix https://www.ftmon.org/blog/secure-ubuntu-server/#Setup_Email and https://sendgrid.com/docs/Integrate/Mail_Servers/postfix.html

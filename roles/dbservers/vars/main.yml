@@ -1,6 +1,0 @@
----
-system_packages_db:
-  - postgresql
-  - postgresql-server-dev-all
-  - postgresql-contrib
-  - postgresql-client
