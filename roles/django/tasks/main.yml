@@ -1,0 +1,14 @@
+---
+- name: Create virtual env directories
+  file:
+    state: directory
+    path: "{{ src_root }}/venv_{{ item.projectname }}"
+  with_items: projects
+  sudo: true
+
+- name: Update venv file permissions
+  file:
+    path: "{{ src_root }}/venv_{{ item.projectname }}"
+    owner: deploy
+  with_items: projects
+  sudo: true

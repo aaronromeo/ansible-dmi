@@ -1,11 +1,8 @@
 ---
-system_packages_web:
+system_packages_role_specific:
   - nginx
   - git-buildpackage
   - supervisor
   - postfix
   - python-virtualenv
   - postgresql-client-common
-python_packages:
-  - pip
-  - virtualenv

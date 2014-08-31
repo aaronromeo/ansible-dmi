@@ -1,0 +1,25 @@
+---
+- name: Remove sites-available from Nginx
+  file:
+    path: /etc/nginx/sites-available
+    state: absent
+  sudo: true
+
+- name: Remove default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  sudo: true
+
+- name: Write nginx.conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  sudo: true
+  notify:
+    - restart nginx
+
+- name: Create nginx log directories
+  file:
+    path: /data/logs/web/{{ item.projectname }}
+    state: directory
+  with_items: projects
+  sudo: true

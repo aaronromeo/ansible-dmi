@@ -1,0 +1,21 @@
+---
+- name: Checkout git-crypt
+  git:
+    repo: "git@github.com:AGWA/git-crypt.git"
+    dest: /tmp/git-crypt
+    force: no
+    update: true
+    version: debian
+    accept_hostkey: yes
+
+- name: Make git-crypt
+  command: make
+  args:
+    chdir: /tmp/git-crypt
+
+- name: Copy git-crypt
+  command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt
+  sudo: true
+
+- name: Copy ssh key for git-crypt
+  copy: src=/Users/aaron/.ssh/id_rsa dest=/home/deploy/.ssh/id_rsa

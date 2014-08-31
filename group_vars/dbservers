@@ -1,0 +1,6 @@
+---
+system_packages_role_specific:
+  - postgresql
+  - postgresql-server-dev-all
+  - postgresql-contrib
+  - postgresql-client
