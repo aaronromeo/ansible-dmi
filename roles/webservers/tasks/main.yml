@@ -1,5 +1,5 @@
 ---
-- name: Install required system packages.
+- name: Install required webserver system packages.
   apt: pkg={{ item }} state=installed update-cache=yes
   sudo: true
   with_items: system_packages_web
@@ -21,7 +21,7 @@
   tags:
     - server-provision
 
-- name: Update file permissions
+- name: Update venv file permissions
   file:
     path: "{{ src_root }}/venv_{{ item.projectname }}"
     owner: deploy

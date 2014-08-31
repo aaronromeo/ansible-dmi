@@ -1,5 +1,5 @@
 ---
-- name: Install required system packages.
+- name: Install required database system packages.
   apt: pkg={{ item }} state=installed update-cache=yes
   sudo: true
   with_items: system_packages_db
