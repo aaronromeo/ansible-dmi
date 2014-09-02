@@ -1,13 +1,20 @@
 ---
+- name: Update packages
+  apt: upgrade=dist update_cache=yes
+  sudo: true
+  notify: Restart machine
+
 - name: Install required common system packages.
-  apt: pkg={{ item }} state=installed update-cache=yes
+  apt: pkg={{ item }} state=installed
   sudo: true
   with_items: system_packages_common
+  notify: Restart machine
 
 - name: Install required role-specific system packages.
-  apt: pkg={{ item }} state=installed update-cache=yes
+  apt: pkg={{ item }} state=installed
   sudo: true
   with_items: system_packages_role_specific
+  notify: Restart machine
 
 - name: Copy host files
   template: src=hosts.j2 dest=/etc/hosts

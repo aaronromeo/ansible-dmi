@@ -10,7 +10,7 @@
   with_items: projects
 
 - name: Create DB
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate --noinput | psql -U postgres -h dmi-dbserver"
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | psql -U postgres -h dmi-dbserver"
   args:
     executable: "/bin/bash"
   with_items: projects
@@ -28,7 +28,10 @@
   with_items: projects
 
 - name: Make Static folder
-  file: dest=/data/venv_breedfeedlaunch/breedfeedlaunch/static state=directory
+  file: path=/data/venv_breedfeedlaunch/breedfeedlaunch/static state=directory
+
+- name: Make data tmp folder
+  file: path=/data/tmp/ state=directory mode=0777
 
 - name: Collect Static
   shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py collectstatic --clear --noinput"

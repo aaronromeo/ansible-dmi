@@ -2,4 +2,4 @@
 - hosts: webservers
   remote_user: deploy
   roles:
-    - python-app-tier
+    - django
