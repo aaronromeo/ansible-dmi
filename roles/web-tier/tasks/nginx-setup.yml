@@ -17,9 +17,10 @@
   notify:
     - restart nginx
 
-- name: Create nginx log directories
+- name: Create log directories
   file:
     path: /data/logs/web/{{ item.projectname }}
     state: directory
+    owner: deploy
   with_items: projects
   sudo: true
