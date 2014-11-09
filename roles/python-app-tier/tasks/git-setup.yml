@@ -1,7 +1,7 @@
 ---
 - name: Checkout git-crypt
   git:
-    repo: "git@github.com:AGWA/git-crypt.git"
+    repo: "https://github.com/AGWA/git-crypt.git"
     dest: /tmp/git-crypt
     force: no
     update: true

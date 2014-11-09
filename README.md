@@ -5,11 +5,32 @@ ansible-dmi
 
 ansible-playbook {{ Playbook Name }}
 
-The two ones here are `db-server.yml` and `web-server.yml`.
+The two ones here are `dbservers.yml` and `web-server.yml`.
 
-### Setting up the hosts for Digital Ocean
+### Setting up the hosts for the VPS
 
-* Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet` and `dmi-web-droplet`.
+* Create your machines on the VPS and remember to enable the _virtual private networking_ feature. If you do this, update your django database settings so to use the VPN IP rather than the public IP. The corresponding IP addresses in `/group_vars/all`.
+
+* Map host name to IP in `/etc/hosts`
+        123.123.123.123   dmi-web-droplet
+        123.123.123.124   dmi-db-droplet
+
+* Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet` and `dmi-web-droplet`. For example,
+        host dmi-db-droplet
+            User deploy
+            Hostname dmi-db-droplet
+            Port 1234
+            ForwardAgent = yes
+            ForwardX11 no
+            IdentityFile /Users/aaron/.ssh/id_rsa
+        host dmi-web-droplet
+            User deploy
+            Hostname dmi-web-droplet
+            Port 1234
+            ForwardAgent = yes
+            ForwardX11 no
+            IdentityFile /Users/aaron/.ssh/id_rsa
+    See information below on securing the SSH connection for information about the port.
 
 * The hosts are set in `/etc/ansible/hosts`. They are currently set as the following...
 
@@ -28,8 +49,14 @@ The two ones here are `db-server.yml` and `web-server.yml`.
         ---
         ansible_ssh_user: {{ the server's ssh user }}
         
+* New projects can be added to the file `/group_vars/all` under the variable `projects`
 
-* New projects can be added to the file `roles/common/vars/main.yml` under the variable `projects`
+# Project requirements
+Django projects are expected to have a directory named `serverdeploy` which contains the following files
+* gunicorn.conf
+* gunicorn_start.bash
+* nginx-sites-enabled.conf
+* vars.secure
 
 # A few useful things to do when creating a server...
 
@@ -38,7 +65,7 @@ The two ones here are `db-server.yml` and `web-server.yml`.
 > sudo update-alternatives --config editor
 ```
 
-### Update the `root` password and add the `hotstuff` user
+### Update the `root` password and add the user configured with ssh. In this example, the `hotstuff` user is added
 ```
 > passwd
 > adduser hotstuff

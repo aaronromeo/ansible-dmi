@@ -16,6 +16,8 @@
   with_items: system_packages_role_specific
   notify: Restart machine
 
+- meta: flush_handlers
+
 - name: Copy host files
   template: src=hosts.j2 dest=/etc/hosts
   sudo: true
