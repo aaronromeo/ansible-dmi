@@ -13,3 +13,4 @@ python_packages:
 src_root: /data
 web_server_ip: 10.128.126.109
 db_server_ip: 10.128.127.115
+create: true
