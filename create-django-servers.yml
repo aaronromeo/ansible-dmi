@@ -1,0 +1,9 @@
+---
+- hosts: webservers
+  remote_user: deploy
+  vars:
+    projects:
+      - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }
+      - { projectname: bodega_notes_server, src: "git@github.com:aaronromeo/bodega_notes_server.git", project_dir: bodega_notes_server }
+  roles:
+    - django

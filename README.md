@@ -3,9 +3,13 @@ ansible-dmi
 
 # Running ansible playbooks
 
-ansible-playbook {{ Playbook Name }}
+`ansible-playbook _{Playbook Name}_`
 
-The two ones here are `dbservers.yml` and `web-server.yml`.
+Right now the following playbooks exist:
+    * application-breedfeedlaunch.yml
+    * create-db-servers.yml
+    * create-django-servers.yml
+    * create-sites.yml
 
 ### Setting up the hosts for the VPS
 
@@ -53,7 +57,7 @@ The two ones here are `dbservers.yml` and `web-server.yml`.
         
 * New projects can be added to the file `/group_vars/all` under the variable `projects`
 
-# Project requirements
+### Project requirements
 Django projects are expected to have a directory named `serverdeploy` which contains the following files
 * gunicorn.conf
 * gunicorn_start.bash
