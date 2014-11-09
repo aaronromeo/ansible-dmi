@@ -12,10 +12,12 @@ The two ones here are `dbservers.yml` and `web-server.yml`.
 * Create your machines on the VPS and remember to enable the _virtual private networking_ feature. If you do this, update your django database settings so to use the VPN IP rather than the public IP. The corresponding IP addresses in `/group_vars/all`.
 
 * Map host name to IP in `/etc/hosts`
+
         123.123.123.123   dmi-web-droplet
         123.123.123.124   dmi-db-droplet
 
 * Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet` and `dmi-web-droplet`. For example,
+
         host dmi-db-droplet
             User deploy
             Hostname dmi-db-droplet
