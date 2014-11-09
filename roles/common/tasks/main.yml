@@ -4,13 +4,13 @@
   sudo: true
   notify: Restart machine
 
-- name: Install required common system packages.
+- name: Install required common system packages
   apt: pkg={{ item }} state=installed
   sudo: true
   with_items: system_packages_common
   notify: Restart machine
 
-- name: Install required role-specific system packages.
+- name: Install required role-specific system packages
   apt: pkg={{ item }} state=installed
   sudo: true
   with_items: system_packages_role_specific

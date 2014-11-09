@@ -34,15 +34,14 @@
   with_items: projects
   sudo: true
   notify: restart nginx
+  tags:
+    - deploy
 
 - name: Enable git-crypt for repos
   command: git-crypt init /home/deploy/.ssh/id_rsa
   args:
     chdir: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
   with_items: projects
-  tags:
-    - server-provision
-    - git-update
 
 - name: Make vars file executable
   file:
@@ -52,4 +51,4 @@
   with_items: projects
   register: result
   tags:
-    - fresh_deploy
+    - deploy
