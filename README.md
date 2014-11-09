@@ -6,7 +6,8 @@ ansible-dmi
 `ansible-playbook _{Playbook Name}_`
 
 Right now the following playbooks exist:
-* application-breedfeedlaunch.yml
+* application-breedfeedlaunch-create.yml
+* application-breedfeedlaunch-deploy.yml
 * create-db-servers.yml
 * create-django-servers.yml
 * create-sites.yml

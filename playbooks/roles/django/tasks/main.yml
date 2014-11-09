@@ -15,6 +15,7 @@
 
 - name: Create DB
   shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | psql -U postgres -h dmi-dbserver"
+  when: create
   args:
     executable: "/bin/bash"
   with_items: projects
@@ -37,9 +38,11 @@
 
 - name: Make static folder
   file: path=/data/venv_breedfeedlaunch/breedfeedlaunch/static state=directory
+  when: create
 
 - name: Make data tmp folder
   file: path=/data/tmp/ state=directory mode=0777
+  when: create
   sudo: true
 
 - name: Collect Static

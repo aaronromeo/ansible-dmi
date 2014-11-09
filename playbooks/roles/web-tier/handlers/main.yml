@@ -8,5 +8,4 @@
   sudo: true
 
 - name: restart supervisor
-  service: name=supervisor state=restarted
-  sudo: true
+  supervisorctl: name='program:' state=started
