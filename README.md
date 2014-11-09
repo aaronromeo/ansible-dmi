@@ -6,10 +6,10 @@ ansible-dmi
 `ansible-playbook _{Playbook Name}_`
 
 Right now the following playbooks exist:
-    * application-breedfeedlaunch.yml
-    * create-db-servers.yml
-    * create-django-servers.yml
-    * create-sites.yml
+* application-breedfeedlaunch.yml
+* create-db-servers.yml
+* create-django-servers.yml
+* create-sites.yml
 
 ### Setting up the hosts for the VPS
 
