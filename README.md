@@ -3,7 +3,7 @@ ansible-dmi
 
 # Running ansible playbooks
 
-`ansible-playbook _{Playbook Name}_`
+`ansible-playbook {{ Playbook Name }}`
 
 Right now the following playbooks exist:
 * application-breedfeedlaunch-create.yml
