@@ -82,19 +82,17 @@
 # maintenance (custom daily cronjobs, replication, and similar tasks).
 #
 # Database administrative login by Unix domain socket
-local   all             postgres                                peer
+# local   all             all                                peer
 
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
-
 # "local" is for Unix domain socket connections only
 local   all             all                                     peer
-# IPv4 local connections:
+# Allow the postgres to login no matter which OS user... Hmmm... This isn't kosher.
+host    all             postgres        127.0.0.1/32            trust
+# Everyone else needs a password
 host    all             all             127.0.0.1/32            md5
-# IPv6 local connections:
 host    all             all             ::1/128                 md5
-# Allow replication connections from localhost, by a user with the
-# replication privilege.
-#local   replication     postgres                                peer
-#host    replication     postgres        127.0.0.1/32            md5
-#host    replication     postgres        ::1/128                 md5
-host    all             all     dmi-webserver                   trust
+# Not sure if I need this because this seems like a security hole.
+# host    all             postgres        dmi-webserver           trust
+# Allow connections from dmi-webserver to provide a password to login
+host    all             all             dmi-webserver           md5
