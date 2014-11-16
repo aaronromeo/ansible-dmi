@@ -37,7 +37,10 @@
     - deploy
 
 - name: Make static folder
-  file: path=/data/venv_breedfeedlaunch/breedfeedlaunch/static state=directory
+  file: 
+    path: "/data/venv_{{ item.projectname }}/{{ item.projectname }}/static"
+    state: directory
+  with_items: projects
   when: create
 
 - name: Make data tmp folder
@@ -53,6 +56,23 @@
   tags:
     - deploy
 
-# supervisorctl reread
-# supervisorctl update
-# supervisorctl start hello
+- name: Remove the offline nginx symlink
+  file: 
+    path: /etc/nginx/sites-enabled/{{ item.projectname }}-offline.conf
+    state: absent
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+
+- name: Link the nginx live site
+  file: 
+    src: /etc/nginx/sites-available/{{ item.projectname }}.conf
+    dest: /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+    state: link
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy

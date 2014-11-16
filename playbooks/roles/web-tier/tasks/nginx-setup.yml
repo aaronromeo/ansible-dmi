@@ -1,10 +1,4 @@
 ---
-- name: Remove sites-available from Nginx
-  file:
-    path: /etc/nginx/sites-available
-    state: absent
-  sudo: true
-
 - name: Remove default Nginx site
   file:
     path: /etc/nginx/sites-enabled/default

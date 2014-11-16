@@ -30,12 +30,45 @@
   with_items: projects
 
 - name: Copy nginx project specific configuration file
-  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-enabled.conf /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ item.projectname }}.conf
   with_items: projects
   sudo: true
   notify: restart nginx
   tags:
     - deploy
+
+- name: Copy nginx offline project specific configuration file
+  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-offline.conf /etc/nginx/sites-available/{{ item.projectname }}-offline.conf
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+
+- name: Unlink the regular nginx file for the deploy
+  file: 
+    path: /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+    state: absent
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+    - offline
+
+- name: Link the offline nginx file for the deploy
+  file: 
+    src: /etc/nginx/sites-available/{{ item.projectname }}-offline.conf
+    dest: /etc/nginx/sites-enabled/{{ item.projectname }}-offline.conf
+    state: link
+  with_items: projects
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+    - offline
+
+- meta: flush_handlers
 
 - name: Enable git-crypt for repos
   command: git-crypt init /home/deploy/.ssh/id_rsa
