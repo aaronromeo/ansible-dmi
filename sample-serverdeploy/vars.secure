@@ -1,0 +1,14 @@
+export SECRET_KEY='{{1234!@#$1234!@#$1234!@#$}}'
+export DB_USER='{{project.databaseuser}}'
+export DB_PASS='{{project.databasepassword}}'
+export DB_NAME='{{project.databasename}}'
+export DB_SERVER='{{project.databaseserver}}'
+
+export EMAIL_HOST='{{project.emailhost}}'
+export EMAIL_PORT=587
+export EMAIL_HOST_USER='{{project.emailhostuser}}'
+export EMAIL_HOST_PASSWORD='{{project.emailhostpassword}}'
+export EMAIL_USE_TLS=0
+export EMAIL_USE_SSL=0
+
+export LOG_DIR=/data/logs/web/{{project.name}}/
