@@ -5,7 +5,7 @@
     dest: /tmp/git-crypt
     force: no
     update: true
-    version: debian
+    version: "0.4"
     accept_hostkey: yes
 
 - name: Make git-crypt
@@ -17,5 +17,15 @@
   command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt
   sudo: true
 
-- name: Copy ssh key for git-crypt
-  copy: src=/Users/aaron/.ssh/id_rsa dest=/home/deploy/.ssh/id_rsa
+- name: Create git-crypt keys directory
+  file: 
+    path: /home/deploy/.git-crypt
+    state: directory
+    mode: "0700"
+
+- name: Copy key for git-crypt
+  copy: 
+    src: "~/Dropbox/git-crypt/{{ item.projectname }}"
+    dest: "/home/deploy/.git-crypt/{{ item.projectname }}"
+    mode: "0600"
+  with_items: projects

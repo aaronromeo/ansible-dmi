@@ -16,6 +16,27 @@
   with_items: system_packages_role_specific
   notify: Restart machine
 
+- name: Copy visudo file
+  template: src=sudoers.j2 dest=/etc/sudoers validate='visudo -cf %s'
+  sudo: true
+  notify: Restart machine
+
+- name: Copy sshd config file
+  template: src=sshd_config.j2 dest=/etc/ssh/sshd_config
+  sudo: true
+  notify: Restart machine
+
+- name: Copy ssh key
+  command: ssh-copy-id deploy@{{ inventory_hostname }}
+  delegate_to: 127.0.0.1
+
+- name: Lock down id_rsa
+  file:
+    path: /home/deploy/.ssh/id_rsa
+    state: touch
+    mode: "0600"
+  with_items: projects
+
 - meta: flush_handlers
 
 - name: Copy host files

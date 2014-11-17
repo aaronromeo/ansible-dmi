@@ -9,3 +9,17 @@
   sudo: true
   sudo_user: postgres
   notify: restart postgres
+
+- name: Setup Postgres user
+  user: 
+    name: postgres
+    createhome: true
+    generate_ssh_key: true
+  sudo: true
+
+- name: Authorize Deploy user to use the Postgres key
+  authorized_key: 
+    user: postgres 
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  sudo: true
+  sudo_user: postgres

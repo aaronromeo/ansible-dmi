@@ -7,3 +7,4 @@ system_packages_role_specific:
   - python-virtualenv
   - postgresql-client-common
   - postgresql-client
+ssh_users: "{{ ansible_ssh_user }}"

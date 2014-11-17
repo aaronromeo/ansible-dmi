@@ -14,7 +14,7 @@
     - deploy
 
 - name: Create DB
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | psql -U postgres -h dmi-dbserver"
+  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | ssh -o StrictHostKeyChecking=no postgres@dmi-dbserver -p {{ ansible_ssh_port }} 'psql'"
   when: create
   sudo_user: postgres
   args:
