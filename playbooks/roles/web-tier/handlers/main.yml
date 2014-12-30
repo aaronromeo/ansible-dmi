@@ -8,4 +8,12 @@
   sudo: true
 
 - name: restart supervisor
+  service: name=supervisor state=restarted sleep=5
+  sudo: true
+
+- name: restart supervisorctl
   supervisorctl: name='program:' state=started
+
+- name: restart rabbitmq
+  service: name=rabbitmq-server state=restarted
+  sudo: true

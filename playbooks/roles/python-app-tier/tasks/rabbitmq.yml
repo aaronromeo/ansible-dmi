@@ -1,0 +1,5 @@
+---
+- name: Install Rabbitmq admin tools
+  command: rabbitmq-plugins enable rabbitmq_management
+  sudo: true
+  notify: restart rabbitmq

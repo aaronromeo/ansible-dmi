@@ -85,3 +85,5 @@
   register: result
   tags:
     - deploy
+
+- include: rabbitmq.yml

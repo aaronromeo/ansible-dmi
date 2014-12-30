@@ -65,6 +65,13 @@ Django projects are expected to have a directory named `serverdeploy` which cont
 * nginx-sites-enabled.conf
 * vars.secure
 
+This project also uses [git-crypt](https://www.agwa.name/projects/git-crypt/) and Dropbox to secure the `vars.secure` file. A example of how this would be used is...
+```
+> git-crypt init
+> git-crypt export-key ~/Dropbox/git-crypt/{{ project_name }}
+```
+The keys are then sourced via the ansible script for an scp styled copy.
+
 # A few useful things to do when creating a server...
 
 ### Update the default editor so we aren't living in squalor
