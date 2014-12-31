@@ -17,3 +17,10 @@
     state: directory
     owner: deploy
   sudo: true
+
+- name: Create extra conf folder
+  file:
+    path: /etc/nginx/conf
+    state: directory
+    owner: deploy
+  sudo: true
