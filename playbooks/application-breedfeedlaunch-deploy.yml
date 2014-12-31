@@ -3,8 +3,8 @@
   hosts: webservers
   remote_user: deploy
   vars:
-    create: false
-    projects:
-      - { projectname: breedfeedlaunch, src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git", project_dir: breedfeedlaunch }
+      projectname: breedfeedlaunch
+      src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git"
+      project_dir: breedfeedlaunch
   roles:
     - django

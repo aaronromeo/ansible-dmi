@@ -1,2 +1,2 @@
 ---
-static_dir: "/data/venv_{{ item.projectname }}/{{ item.projectname }}/static"
+static_dir: "/data/venv_{{ projectname }}/{{ projectname }}/static"

@@ -1,9 +1,8 @@
 ---
 - name: Remove the offline nginx symlink
   file: 
-    path: /etc/nginx/sites-enabled/{{ item.projectname }}-offline.conf
+    path: /etc/nginx/sites-enabled/{{ projectname }}-offline.conf
     state: absent
-  with_items: projects
   sudo: true
   notify: restart nginx
   tags:
@@ -11,10 +10,9 @@
 
 - name: Link the nginx live site
   file: 
-    src: /etc/nginx/sites-available/{{ item.projectname }}.conf
-    dest: /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+    src: /etc/nginx/sites-available/{{ projectname }}.conf
+    dest: /etc/nginx/sites-enabled/{{ projectname }}.conf
     state: link
-  with_items: projects
   sudo: true
   notify: restart nginx
   tags:

@@ -6,40 +6,35 @@
 - name: Create web repo directories
   file:
     state: directory
-    path: "{{ src_root }}/venv_{{ item.projectname }}"
-  with_items: projects
+    path: "{{ src_root }}/venv_{{ projectname }}"
   sudo: true
 
 - name: Update web repo permissions
   file:
-    path: "{{ src_root }}/venv_{{ item.projectname }}"
+    path: "{{ src_root }}/venv_{{ projectname }}"
     owner: deploy
-  with_items: projects
   sudo: true
 
 - include: git-setup.yml
 
 - name: Checkout repos
   git:
-    repo: "{{ item.src }}"
-    dest: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
+    repo: "{{ src }}"
+    dest: "{{ src_root }}/venv_{{ projectname }}/{{ projectname }}"
     force: yes
     update: true
     accept_hostkey: yes
   notify: restart supervisor
-  with_items: projects
 
 - name: Copy nginx project specific configuration file
-  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ item.projectname }}.conf
-  with_items: projects
+  command: cp {{ config_files_base }}/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ projectname }}.conf
   sudo: true
   notify: restart nginx
   tags:
     - deploy
 
 - name: Copy nginx offline project specific configuration file
-  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/nginx-sites-offline.conf /etc/nginx/sites-available/{{ item.projectname }}-offline.conf
-  with_items: projects
+  command: cp {{ config_files_base }}/nginx-sites-offline.conf /etc/nginx/sites-available/{{ projectname }}-offline.conf
   sudo: true
   notify: restart nginx
   tags:
@@ -47,9 +42,8 @@
 
 - name: Unlink the regular nginx file for the deploy
   file: 
-    path: /etc/nginx/sites-enabled/{{ item.projectname }}.conf
+    path: /etc/nginx/sites-enabled/{{ projectname }}.conf
     state: absent
-  with_items: projects
   sudo: true
   notify: restart nginx
   tags:
@@ -58,10 +52,9 @@
 
 - name: Link the offline nginx file for the deploy
   file: 
-    src: /etc/nginx/sites-available/{{ item.projectname }}-offline.conf
-    dest: /etc/nginx/sites-enabled/{{ item.projectname }}-offline.conf
+    src: /etc/nginx/sites-available/{{ projectname }}-offline.conf
+    dest: /etc/nginx/sites-enabled/{{ projectname }}-offline.conf
     state: link
-  with_items: projects
   sudo: true
   notify: restart nginx
   tags:
@@ -71,17 +64,15 @@
 - meta: flush_handlers
 
 - name: Enable git-crypt for repos
-  command: "git-crypt unlock /home/deploy/.git-crypt/{{ item.projectname }}"
+  command: "git-crypt unlock /home/deploy/.git-crypt/{{ projectname }}"
   args:
-    chdir: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}"
-  with_items: projects
+    chdir: "{{ src_root }}/venv_{{ projectname }}/{{ projectname }}"
 
 - name: Make vars file executable
   file:
-    path: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure"
+    path: "{{ config_files_base }}/vars.secure"
     state: touch
     mode: "0700"
-  with_items: projects
   register: result
   tags:
     - deploy

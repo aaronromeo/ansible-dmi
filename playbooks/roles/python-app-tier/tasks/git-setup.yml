@@ -25,7 +25,6 @@
 
 - name: Copy key for git-crypt
   copy: 
-    src: "~/Dropbox/git-crypt/{{ item.projectname }}"
-    dest: "/home/deploy/.git-crypt/{{ item.projectname }}"
+    src: "~/Dropbox/git-crypt/{{ projectname }}"
+    dest: "/home/deploy/.git-crypt/{{ projectname }}"
     mode: "0600"
-  with_items: projects
