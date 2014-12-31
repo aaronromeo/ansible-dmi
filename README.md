@@ -3,6 +3,8 @@ ansible-dmi
 
 # Running ansible playbooks
 
+`git pull`
+`git submodule status`
 `ansible-playbook {{ Playbook Name }}`
 
 Right now the following playbooks exist:
@@ -75,6 +77,8 @@ If further customization is required (as in the case of the `kromeo2015` deploy)
 > cd playbooks/roles
 > git submodule add https://github.com/{{ repo_name }}.git {{ project_name }}
 ```
+
+Remember to use `git submodule status` to verify the submodule's status.
 
 Add a new application playbook named `application-{{ project_name }}-deploy.yml`
 ```
