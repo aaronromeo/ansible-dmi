@@ -48,7 +48,6 @@
     path: /home/deploy/.ssh/id_rsa
     state: touch
     mode: "0600"
-  with_items: projects
 
 - meta: flush_handlers
 

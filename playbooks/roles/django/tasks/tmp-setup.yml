@@ -1,0 +1,5 @@
+---
+- name: Make data tmp folder
+  file: path=/data/tmp/ state=directory mode=0777
+  when: create
+  sudo: true

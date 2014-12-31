@@ -1,0 +1,13 @@
+---
+- name: Make static folder
+  file: 
+    path: "{{ static_dir }}"
+    state: directory
+  when: create
+
+- name: Collect Static
+  shell: "source {{ config_files_base }}/vars.secure && {{ src_root }}/venv_{{ projectname }}/bin/python {{ src_root }}/venv_{{ projectname }}/{{ projectname }}/{{ projectname }}/manage.py collectstatic --clear --noinput"
+  args:
+    executable: "/bin/bash"
+  tags:
+    - deploy
