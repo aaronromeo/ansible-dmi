@@ -79,7 +79,7 @@ If further customization is required (as in the case of the `kromeo2015` deploy)
 Add a new application playbook named `application-{{ project_name }}-deploy.yml`
 ```
     ---
-    - name: Deploy Kromeo2015 Launch
+    - name: Deploy {{ project_name }}
       hosts: webservers
       remote_user: deploy
       roles:
@@ -89,7 +89,7 @@ Add a new application playbook named `application-{{ project_name }}-deploy.yml`
 If this is a further customize project, modify this to include {{ project_name }}.
 ```
     ---
-    - name: Deploy Kromeo2015 Launch
+    - name: Deploy {{ project_name }}
       hosts: webservers
       remote_user: deploy
       roles:
