@@ -1,4 +1,12 @@
 ---
+- name: Add New Relic Repo
+  apt_repository: repo='deb http://apt.newrelic.com/debian/ newrelic non-free' state=present
+  sudo: true
+
+- name: Trust New Relic GPG key
+  shell: "wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add -"
+  sudo: true
+
 - name: Update packages
   apt: upgrade=dist update_cache=yes
   sudo: true
@@ -15,6 +23,11 @@
   sudo: true
   with_items: system_packages_role_specific
   notify: Restart machine
+
+- name: New Relic license key
+  shell: "nrsysmond-config --set license_key={{ newrelic_license }}"
+  sudo: true
+  notify: Restart New Relic
 
 - name: Copy visudo file
   template: src=sudoers.j2 dest=/etc/sudoers validate='visudo -cf %s'
