@@ -24,7 +24,9 @@
     force: yes
     update: true
     accept_hostkey: yes
-  notify: restart supervisor
+  notify: 
+    - stop supervisorctl
+    - restart supervisor
 
 - name: Copy nginx project specific configuration file
   command: cp {{ config_files_base }}/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ projectname }}.conf

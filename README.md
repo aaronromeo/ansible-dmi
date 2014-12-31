@@ -6,8 +6,8 @@ ansible-dmi
 `ansible-playbook {{ Playbook Name }}`
 
 Right now the following playbooks exist:
-* application-breedfeedlaunch-create.yml
 * application-breedfeedlaunch-deploy.yml
+* application-kromeo2015-deploy.yml
 * create-db-servers.yml
 * create-django-servers.yml
 * create-sites.yml
@@ -55,15 +55,48 @@ Right now the following playbooks exist:
 
         ---
         ansible_ssh_user: {{ the server's ssh user }}
+        ansible_ssh_port: {{ the server's ssh port }}
+
+* This also requires the setting in `/etc/ansible/group_vars/all`
+        ---
+        newrelic_license: {{ the newrelic license key }}
         
 * New projects can be added to the file `/group_vars/all` under the variable `projects`
 
 ### Project requirements
-Django projects are expected to have a directory named `serverdeploy` which contains the following files
+The current Django project default expects a directory named `serverdeploy` which contains the following files
 * gunicorn.conf
 * gunicorn_start.bash
 * nginx-sites-enabled.conf
 * vars.secure
+
+If further customization is required (as in the case of the `kromeo2015` deploy), this can be added as a submodule.
+```
+> cd playbooks/roles
+> git submodule add https://github.com/{{ repo_name }}.git {{ project_name }}
+```
+
+Add a new application playbook named `application-{{ project_name }}-deploy.yml`
+```
+    ---
+    - name: Deploy Kromeo2015 Launch
+      hosts: webservers
+      remote_user: deploy
+      roles:
+        - django
+```
+
+If this is a further customize project, modify this to include {{ project_name }}.
+```
+    ---
+    - name: Deploy Kromeo2015 Launch
+      hosts: webservers
+      remote_user: deploy
+      roles:
+        - {{ project_name }}
+```
+
+The add the application name in `create-django-servers.yml`.
 
 This project also uses [git-crypt](https://www.agwa.name/projects/git-crypt/) and Dropbox to secure the `vars.secure` file. A example of how this would be used is...
 ```

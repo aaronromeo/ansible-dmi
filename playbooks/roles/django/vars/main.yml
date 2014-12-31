@@ -1,2 +1,4 @@
 ---
 static_dir: "/data/venv_{{ projectname }}/{{ projectname }}/static"
+processes:
+  - "{{ projectname }}"
