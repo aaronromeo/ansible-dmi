@@ -3,10 +3,19 @@ ansible-dmi
 
 # Running ansible playbooks
 
+Verify if the submodules need to pulled again...
 ```
     git pull
-    git submodule status
+    git submodule foreach git pull
+```
+
+Then run...
+```
     ansible-playbook {{ Playbook Name }}
+```
+Or    
+```
+    ansible-playbook {{ Playbook Name }} --extra-vars "create=true"
 ```
 
 Right now the following playbooks exist:
