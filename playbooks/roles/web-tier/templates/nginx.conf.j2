@@ -1,5 +1,5 @@
 user www-data;
-worker_processes 4;
+worker_processes auto;
 pid /run/nginx.pid;
 
 events {
@@ -63,6 +63,10 @@ http {
 
 	#passenger_root /usr;
 	#passenger_ruby /usr/bin/ruby;
+
+	# SSL session parameters to avoid SSL handshakes for parallel and subsequent connections
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
 
 	##
 	# Virtual Host Configs
