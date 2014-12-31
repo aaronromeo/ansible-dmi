@@ -1,0 +1,24 @@
+---
+- name: Create DB
+  shell: "source {{ config_files_base }}/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | ssh -o StrictHostKeyChecking=no postgres@dmi-dbserver -p {{ ansible_ssh_port }} 'psql'"
+  when: create
+  sudo_user: postgres
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+
+- name: Sync DB
+  shell: "source {{ config_files_base }}/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py syncdb --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+  tags:
+    - deploy
+
+- name: Migrate DB
+  shell: "source {{ config_files_base }}/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py migrate --noinput"
+  args:
+    executable: "/bin/bash"
+  with_items: projects
+  tags:
+    - deploy

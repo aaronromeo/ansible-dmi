@@ -1,79 +1,12 @@
 ---
-- name: Copy gunicorn project specific configuration file
-  command: cp {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/gunicorn.conf /etc/supervisor/conf.d/{{ item.projectname }}.conf
-  with_items: projects
-  sudo: true
-  notify: restart supervisor
-  tags:
-    - deploy
+- include: supervisor-setup.yml
 
-- name: Install repos requirements
-  pip: requirements={{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/requirements.txt virtualenv={{ src_root }}/venv_{{ item.projectname }}
-  with_items: projects
-  tags:
-    - deploy
+- include: tmp-setup.yml
 
-- name: Create DB
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py sqlcreate | ssh -o StrictHostKeyChecking=no postgres@dmi-dbserver -p {{ ansible_ssh_port }} 'psql'"
-  when: create
-  sudo_user: postgres
-  args:
-    executable: "/bin/bash"
-  with_items: projects
+- include: requirements-setup.yml
 
-- name: Sync DB
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py syncdb --noinput"
-  args:
-    executable: "/bin/bash"
-  with_items: projects
-  tags:
-    - deploy
+- include: django-db-setup.yml
 
-- name: Migrate DB
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py migrate --noinput"
-  args:
-    executable: "/bin/bash"
-  with_items: projects
-  tags:
-    - deploy
+- include: static-setup.yml
 
-- name: Make static folder
-  file: 
-    path: "/data/venv_{{ item.projectname }}/{{ item.projectname }}/static"
-    state: directory
-  with_items: projects
-  when: create
-
-- name: Make data tmp folder
-  file: path=/data/tmp/ state=directory mode=0777
-  when: create
-  sudo: true
-
-- name: Collect Static
-  shell: "source {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy/vars.secure && {{ src_root }}/venv_{{ item.projectname }}/bin/python {{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/{{ item.projectname }}/manage.py collectstatic --clear --noinput"
-  args:
-    executable: "/bin/bash"
-  with_items: projects
-  tags:
-    - deploy
-
-- name: Remove the offline nginx symlink
-  file: 
-    path: /etc/nginx/sites-enabled/{{ item.projectname }}-offline.conf
-    state: absent
-  with_items: projects
-  sudo: true
-  notify: restart nginx
-  tags:
-    - deploy
-
-- name: Link the nginx live site
-  file: 
-    src: /etc/nginx/sites-available/{{ item.projectname }}.conf
-    dest: /etc/nginx/sites-enabled/{{ item.projectname }}.conf
-    state: link
-  with_items: projects
-  sudo: true
-  notify: restart nginx
-  tags:
-    - deploy
+- include: ../../python-app-tier/tasks/nginx-disable-offline.yml

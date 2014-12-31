@@ -1,0 +1,8 @@
+---
+- name: Copy gunicorn project specific configuration file
+  command: cp {{ config_files_base }}/gunicorn.conf /etc/supervisor/conf.d/{{ item.projectname }}.conf
+  with_items: projects
+  sudo: true
+  notify: restart supervisor
+  tags:
+    - deploy

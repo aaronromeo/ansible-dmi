@@ -1,0 +1,6 @@
+---
+- name: Install repos requirements
+  pip: requirements={{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/requirements.txt virtualenv={{ src_root }}/venv_{{ item.projectname }}
+  with_items: projects
+  tags:
+    - deploy

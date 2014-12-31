@@ -2,3 +2,4 @@
 python_packages:
   - pip
   - virtualenv
+config_files_base: "{{ src_root }}/venv_{{ item.projectname }}/{{ item.projectname }}/serverdeploy"
