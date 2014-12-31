@@ -3,9 +3,11 @@ ansible-dmi
 
 # Running ansible playbooks
 
-`git pull`
-`git submodule status`
-`ansible-playbook {{ Playbook Name }}`
+```
+    git pull
+    git submodule status
+    ansible-playbook {{ Playbook Name }}
+```
 
 Right now the following playbooks exist:
 * application-breedfeedlaunch-deploy.yml
