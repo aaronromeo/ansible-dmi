@@ -1,4 +1,11 @@
 ---
+- name: Create log directories
+  file:
+    path: /data/logs/web/{{ projectname }}
+    state: directory
+    owner: deploy
+  sudo: true
+
 - name: Install Rabbitmq admin tools
   command: rabbitmq-plugins enable rabbitmq_management
   sudo: true

@@ -1,0 +1,30 @@
+---
+- name: Checkout git-crypt
+  git:
+    repo: "https://github.com/AGWA/git-crypt.git"
+    dest: /tmp/git-crypt
+    force: no
+    update: true
+    version: "0.4"
+    accept_hostkey: yes
+
+- name: Make git-crypt
+  command: make
+  args:
+    chdir: /tmp/git-crypt
+
+- name: Copy git-crypt
+  command: mv /tmp/git-crypt/git-crypt /usr/local/bin/git-crypt
+  sudo: true
+
+- name: Create git-crypt keys directory
+  file: 
+    path: /home/deploy/.git-crypt
+    state: directory
+    mode: "0700"
+
+- name: Copy key for git-crypt
+  copy: 
+    src: "~/Dropbox/git-crypt/{{ projectname }}"
+    dest: "/home/deploy/.git-crypt/{{ projectname }}"
+    mode: "0600"

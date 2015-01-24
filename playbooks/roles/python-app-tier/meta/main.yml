@@ -1,3 +1,3 @@
 ---
 dependencies:
-   - { role: web-tier }
+   - { role: git-tier }

@@ -2,3 +2,37 @@
 - include: nginx-setup.yml
 
 # Install postfix https://www.ftmon.org/blog/secure-ubuntu-server/#Setup_Email and https://sendgrid.com/docs/Integrate/Mail_Servers/postfix.html
+
+- name: Copy nginx project specific configuration file
+  command: cp {{ config_files_base }}/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ projectname }}.conf
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+
+- name: Copy nginx offline project specific configuration file
+  command: cp {{ config_files_base }}/nginx-sites-offline.conf /etc/nginx/sites-available/{{ projectname }}-offline.conf
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+
+- include: nginx-enable-offline.yml
+
+- name: Make vars file executable
+  file:
+    path: "{{ config_files_base }}/vars.secure"
+    state: touch
+    mode: "0700"
+  register: result
+  tags:
+    - deploy
+
+- name: Create log directories
+  file:
+    path: /data/logs/web/{{ projectname }}
+    state: directory
+    owner: deploy
+  sudo: true
+
+- meta: flush_handlers

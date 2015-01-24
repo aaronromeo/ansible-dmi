@@ -1,8 +1,4 @@
 ---
-- name: Install required Python packages.
-  easy_install: name={{ item }}
-  with_items: python_packages
-
 - name: Create web repo directories
   file:
     state: directory
@@ -32,14 +28,5 @@
   command: "git-crypt unlock /home/deploy/.git-crypt/{{ projectname }}"
   args:
     chdir: "{{ src_root }}/venv_{{ projectname }}/{{ projectname }}"
-
-- name: Make vars file executable
-  file:
-    path: "{{ config_files_base }}/vars.secure"
-    state: touch
-    mode: "0700"
-  register: result
-  tags:
-    - deploy
 
 - meta: flush_handlers

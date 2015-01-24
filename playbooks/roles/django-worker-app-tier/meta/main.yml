@@ -1,0 +1,4 @@
+---
+dependencies:
+   - { role: worker-tier }
+   - { role: django-base-app-tier }

@@ -98,7 +98,7 @@ Add a new application playbook named `application-{{ project_name }}-deploy.yml`
       hosts: webservers
       remote_user: deploy
       roles:
-        - django
+        - django-web-app-tier
 ```
 
 If this is a further customize project, modify this to include {{ project_name }}.

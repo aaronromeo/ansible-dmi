@@ -1,0 +1,6 @@
+---
+- include: tmp-setup.yml
+
+- include: requirements-setup.yml
+
+- include: static-setup.yml

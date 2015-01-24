@@ -6,16 +6,3 @@
 - name: reload nginx
   service: name=nginx state=reloaded
   sudo: true
-
-- name: stop supervisorctl
-  supervisorctl: name={{ item }} state=stopped
-  with_items: processes
-  sudo: true
-
-- name: restart supervisor
-  service: name=supervisor state=restarted sleep=5
-  sudo: true
-
-- name: restart rabbitmq
-  service: name=rabbitmq-server state=restarted
-  sudo: true
