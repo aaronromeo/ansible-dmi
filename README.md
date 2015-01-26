@@ -69,6 +69,7 @@ Right now the following playbooks exist:
         ---
         ansible_ssh_user: {{ the server's ssh user }}
         ansible_ssh_port: {{ the server's ssh port }}
+        rabbitmq_guest_default_pass: {{ the default password for the guest user }}
 
 * This also requires the setting in `/etc/ansible/group_vars/all`
         ---
@@ -98,7 +99,7 @@ Add a new application playbook named `application-{{ project_name }}-deploy.yml`
       hosts: webservers
       remote_user: deploy
       roles:
-        - django
+        - django-web-app-tier
 ```
 
 If this is a further customize project, modify this to include {{ project_name }}.

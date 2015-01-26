@@ -1,0 +1,17 @@
+---
+- name: Create log directories
+  file:
+    path: /data/logs/web/{{ projectname }}
+    state: directory
+    owner: deploy
+  sudo: true
+
+# Defaults to using the URI http://<worker server IP>:15672/
+- name: Install Rabbitmq admin tools
+  command: rabbitmq-plugins enable rabbitmq_management
+  sudo: true
+  notify: restart rabbitmq
+
+- name: Update Rabbitmq guest password
+  command: "rabbitmqctl change_password guest {{ rabbitmq_guest_default_pass }}"
+  sudo: true
