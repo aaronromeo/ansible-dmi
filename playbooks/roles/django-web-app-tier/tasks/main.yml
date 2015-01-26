@@ -1,0 +1,6 @@
+---
+- include: supervisor-setup.yml
+
+- include: django-db-setup.yml
+
+- include: ../../web-tier/tasks/nginx-disable-offline.yml

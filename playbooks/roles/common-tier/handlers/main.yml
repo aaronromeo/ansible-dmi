@@ -16,3 +16,12 @@
   service:
     name=newrelic-sysmond
     state=restarted
+
+- name: stop supervisorctl
+  supervisorctl: name={{ item }} state=stopped
+  with_items: processes
+  sudo: true
+
+- name: restart supervisor
+  service: name=supervisor state=restarted sleep=5
+  sudo: true

@@ -11,13 +11,6 @@
   notify:
     - restart nginx
 
-- name: Create log directories
-  file:
-    path: /data/logs/web/{{ projectname }}
-    state: directory
-    owner: deploy
-  sudo: true
-
 - name: Create extra conf folder
   file:
     path: /etc/nginx/conf

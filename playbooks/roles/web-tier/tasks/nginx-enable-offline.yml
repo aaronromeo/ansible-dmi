@@ -1,0 +1,21 @@
+---
+- name: Unlink the application nginx file for the deploy
+  file: 
+    path: /etc/nginx/sites-enabled/{{ projectname }}.conf
+    state: absent
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+    - offline
+
+- name: Link the offline nginx file for the deploy
+  file: 
+    src: /etc/nginx/sites-available/{{ projectname }}-offline.conf
+    dest: /etc/nginx/sites-enabled/{{ projectname }}-offline.conf
+    state: link
+  sudo: true
+  notify: restart nginx
+  tags:
+    - deploy
+    - offline

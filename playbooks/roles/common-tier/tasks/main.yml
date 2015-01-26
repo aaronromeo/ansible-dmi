@@ -49,8 +49,9 @@
     state: touch
     mode: "0600"
 
-- meta: flush_handlers
-
 - name: Copy host files
   template: src=hosts.j2 dest=/etc/hosts
   sudo: true
+  notify: Restart machine
+
+- meta: flush_handlers

@@ -1,3 +1,7 @@
 ---
 - include: create-db-servers.yml
+  vars:
+    create: true
 - include: create-django-servers.yml
+  vars:
+    create: true

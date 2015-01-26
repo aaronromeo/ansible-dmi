@@ -7,4 +7,4 @@
       src: "git@bitbucket.org:digbymarksitconsulting/breedfeedlaunch.git"
       project_dir: breedfeedlaunch
   roles:
-    - django
+    - django-web-app-tier

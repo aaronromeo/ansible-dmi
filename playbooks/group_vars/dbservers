@@ -5,3 +5,4 @@ system_packages_role_specific:
   - postgresql-contrib
   - postgresql-client
 ssh_users: "{{ ansible_ssh_user }} postgres"
+host_type: dbserver
