@@ -33,8 +33,9 @@ Right now the following playbooks exist:
 
         123.123.123.123   dmi-web-droplet
         123.123.123.124   dmi-db-droplet
+        123.123.123.125   dmi-worker-droplet
 
-* Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet` and `dmi-web-droplet`. For example,
+* Setup the mapping in `~/.ssh/config.d/` for `dmi-db-droplet`, `dmi-worker-droplet` and `dmi-web-droplet`. For example,
 
         host dmi-db-droplet
             User deploy
@@ -50,6 +51,13 @@ Right now the following playbooks exist:
             ForwardAgent = yes
             ForwardX11 no
             IdentityFile /Users/aaron/.ssh/id_rsa
+        host dmi-worker-droplet
+            User deploy
+            Hostname dmi-worker-droplet
+            Port 1234
+            ForwardAgent = yes
+            ForwardX11 no
+            IdentityFile /Users/aaron/.ssh/id_rsa
     See information below on securing the SSH connection for information about the port.
 
 * The hosts are set in `/etc/ansible/hosts`. They are currently set as the following...
@@ -57,6 +65,7 @@ Right now the following playbooks exist:
         [droplets]
         dmi-db-droplet
         dmi-web-droplet
+        dmi-worker-droplet
     
         [dbservers]
         dmi-db-droplet
@@ -64,18 +73,21 @@ Right now the following playbooks exist:
         [webservers]
         dmi-web-droplet
 
+        [workerservers]
+        dmi-worker-droplet
+
 * This also requires the setting in `/etc/ansible/group_vars/droplets` 
 
         ---
         ansible_ssh_user: {{ the server's ssh user }}
         ansible_ssh_port: {{ the server's ssh port }}
 
-* This also requires the setting in `/etc/ansible/group_vars/all`
+        rabbitmq_guest_default_pass: {{ the default password for the guest user }}
+
+* And also requires the setting in `/etc/ansible/group_vars/all`
         ---
         newrelic_license: {{ the newrelic license key }}
         
-* New projects can be added to the file `/group_vars/all` under the variable `projects`
-
 ### Project requirements
 The current Django project default expects a directory named `serverdeploy` which contains the following files
 * gunicorn.conf
@@ -101,7 +113,7 @@ Add a new application playbook named `application-{{ project_name }}-deploy.yml`
         - django
 ```
 
-If this is a further customize project, modify this to include {{ project_name }}.
+If this is a further customized project, modify this new playbook to include {{ project_name }}.
 ```
     ---
     - name: Deploy {{ project_name }}
@@ -111,7 +123,7 @@ If this is a further customize project, modify this to include {{ project_name }
         - {{ project_name }}
 ```
 
-The add the application name in `create-django-servers.yml`.
+Then add the application name in `create-django-servers.yml`.
 
 This project also uses [git-crypt](https://www.agwa.name/projects/git-crypt/) and Dropbox to secure the `vars.secure` file. A example of how this would be used is...
 ```
