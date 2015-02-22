@@ -1,0 +1,11 @@
+---
+- name: Deploy Pawtrol Server Launch Worker Server
+  hosts: webservers
+  remote_user: deploy
+  roles:
+    - pawtrolserver
+- name: Deploy Pawtrol Server Launch Web Server
+  hosts: workerservers
+  remote_user: deploy
+  roles:
+    - pawtrolserver

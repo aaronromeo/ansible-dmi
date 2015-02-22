@@ -2,7 +2,6 @@
 - name: Create DB
   shell: "source {{ config_files_base }}/vars.secure && {{ src_root }}/venv_{{ projectname }}/bin/python {{ src_root }}/venv_{{ projectname }}/{{ projectname }}/{{ projectname }}/manage.py sqlcreate | ssh -o StrictHostKeyChecking=no postgres@dmi-dbserver -p {{ ansible_ssh_port }} 'psql'"
   when: create
-  sudo_user: postgres
   args:
     executable: "/bin/bash"
 
