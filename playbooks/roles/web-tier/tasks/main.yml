@@ -7,15 +7,11 @@
   command: cp {{ config_files_base }}/nginx-sites-enabled.conf /etc/nginx/sites-available/{{ projectname }}.conf
   sudo: true
   notify: restart nginx
-  tags:
-    - deploy
 
 - name: Copy nginx offline project specific configuration file
   command: cp {{ config_files_base }}/nginx-sites-offline.conf /etc/nginx/sites-available/{{ projectname }}-offline.conf
   sudo: true
   notify: restart nginx
-  tags:
-    - deploy
 
 - include: nginx-enable-offline.yml
 
@@ -25,8 +21,6 @@
     state: touch
     mode: "0700"
   register: result
-  tags:
-    - deploy
 
 - name: Create log directories
   file:

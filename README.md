@@ -13,9 +13,19 @@ Then run...
 ```
     ansible-playbook {{ Playbook Name }}
 ```
-Or    
+Or if a playbook needs to run to explicitly create a server...
 ```
     ansible-playbook {{ Playbook Name }} --extra-vars "create=true"
+```
+
+It is also possible to put a web site into an offline state
+```
+    ansible-playbook {{ Playbook Name }} --tags "enable-offline-mode"
+```
+
+To bring it out of an offline state
+```
+    ansible-playbook {{ Playbook Name }} --tags "disable-offline-mode"
 ```
 
 Right now the following playbooks exist:
