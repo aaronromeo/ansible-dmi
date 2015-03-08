@@ -31,6 +31,7 @@ To bring it out of an offline state
 Right now the following playbooks exist:
 * application-breedfeedlaunch-deploy.yml
 * application-kromeo2015-deploy.yml
+* application-pawtrolserver-deploy.yml
 * create-db-servers.yml
 * create-django-servers.yml
 * create-sites.yml
@@ -98,7 +99,15 @@ Right now the following playbooks exist:
 * And also requires the setting in `/etc/ansible/group_vars/all`
         ---
         newrelic_license: {{ the newrelic license key }}
-        
+
+* `~/.ssh/known_hosts` might need the old host entries removed
+
+* Finally, update the VPN IP variables in `playbooks/group_vars/all`
+        ---
+        web_server_vpn_ip: 10.10.10.10
+        db_server_vpn_ip: 10.10.10.11
+        worker_server_vpn_ip: 10.10.10.12
+
 ### Project requirements
 The current Django project default expects a directory named `serverdeploy` which contains the following files
 * gunicorn.conf
@@ -180,4 +189,17 @@ AllowUsers hotstuff # You'll probably need to add this line
 ### To copy over the SSH key (this is done from the local machine)
 ```
 ssh-copy-id hotstuff@{server-name}
+```
+
+### When migrating servers, the following script is handy to export all the databases.
+Note that this will also drop the databases...
+
+Export the DB from the old DB server
+```
+pg_dumpall -c -w -f /tmp/backup.psql
+```
+
+Import the DB into the new DB server
+```
+psql < backup.psql
 ```

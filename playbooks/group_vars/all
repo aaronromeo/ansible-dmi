@@ -18,8 +18,8 @@ python_packages:
   - pip
   - virtualenv
 src_root: /data
-web_server_ip: 10.128.78.119
-db_server_ip: 10.128.127.120
-worker_server_ip: 10.128.79.125
+web_server_vpn_ip: 10.128.72.86
+db_server_vpn_ip: 10.128.126.109
+worker_server_vpn_ip: 10.128.127.115
 create: false
 host_type: false
