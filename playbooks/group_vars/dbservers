@@ -1,7 +1,9 @@
 ---
 system_packages_role_specific:
-  - postgresql
-  - postgresql-server-dev-all
+  - postgresql-9.3
+  - postgresql-9.3-postgis-2.1
+  - postgresql-9.3-postgis-scripts
+  - postgresql-server-dev-9.3
   - postgresql-contrib
   - postgresql-client
 ssh_users: "{{ ansible_ssh_user }} postgres"

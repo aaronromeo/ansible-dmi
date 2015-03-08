@@ -6,7 +6,7 @@
   sudo: true
   notify: restart nginx
   tags:
-    - deploy
+    - disable-offline-mode
 
 - name: Link the nginx live site
   file: 
@@ -16,4 +16,4 @@
   sudo: true
   notify: restart nginx
   tags:
-    - deploy
+    - disable-offline-mode

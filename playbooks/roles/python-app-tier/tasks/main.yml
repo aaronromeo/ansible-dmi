@@ -39,7 +39,5 @@
     state: touch
     mode: "0700"
   register: result
-  tags:
-    - deploy
 
 - meta: flush_handlers

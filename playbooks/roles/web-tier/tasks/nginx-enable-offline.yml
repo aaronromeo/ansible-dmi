@@ -6,8 +6,7 @@
   sudo: true
   notify: restart nginx
   tags:
-    - deploy
-    - offline
+    - enable-offline-mode
 
 - name: Link the offline nginx file for the deploy
   file: 
@@ -17,5 +16,4 @@
   sudo: true
   notify: restart nginx
   tags:
-    - deploy
-    - offline
+    - enable-offline-mode

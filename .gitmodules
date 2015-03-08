@@ -1,3 +1,6 @@
 [submodule "playbooks/roles/kromeo2015"]
 	path = playbooks/roles/kromeo2015
     url = https://github.com/aaronromeo/kromeo2015-ansible-dmi.git
+[submodule "playbooks/roles/pawtrolserver"]
+	path = playbooks/roles/pawtrolserver
+	url = https://github.com/aaronromeo/pawtrolserver-ansible-dmi

@@ -5,5 +5,3 @@
   notify: 
     - stop supervisorctl
     - restart supervisor
-  tags:
-    - deploy
