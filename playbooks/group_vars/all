@@ -4,6 +4,7 @@ system_packages_common:
   - git
   - libevent-dev
   - libpq-dev
+  - libffi-dev
   - python-dev
   - python-setuptools
   - python-psycopg2
