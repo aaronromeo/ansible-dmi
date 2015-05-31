@@ -14,6 +14,7 @@ system_packages_common:
   - libproj-dev
   - gdal-bin
   - python-gdal
+  - python-openssl
 python_packages:
   - pip
   - virtualenv
