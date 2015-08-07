@@ -1,0 +1,11 @@
+---
+- name: Deploy heyromeo2017 Launch Worker Server
+  hosts: workerservers
+  remote_user: deploy
+  roles:
+    - heyromeo2017
+- name: Deploy heyromeo2017 Launch Web Server
+  hosts: webservers
+  remote_user: deploy
+  roles:
+    - heyromeo2017

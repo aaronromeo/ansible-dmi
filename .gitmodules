@@ -4,3 +4,6 @@
 [submodule "playbooks/roles/pawtrolserver"]
 	path = playbooks/roles/pawtrolserver
 	url = https://github.com/aaronromeo/pawtrolserver-ansible-dmi
+[submodule "playbooks/heyromeo2017"]
+	path = playbooks/heyromeo2017
+	url = https://gitlab.com/aaronromeo/heyromeo2017-ansible-dmi.git
