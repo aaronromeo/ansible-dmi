@@ -19,9 +19,22 @@
 
 - name: stop supervisorctl
   supervisorctl: name={{ item }} state=stopped
+  ignore_errors: true
   with_items: processes
   sudo: true
 
-- name: restart supervisor
-  service: name=supervisor state=restarted sleep=5
+- name: reload supervisorctl
+  supervisorctl: name={{ item }} state=reloaded
+  ignore_errors: true
+  with_items: processes
+  sudo: true
+
+- name: reload supervisorctl
+  supervisorctl: name={{ item }} state=restarted
+  ignore_errors: true
+  with_items: processes
+  sudo: true
+
+- name: start supervisor
+  service: name=supervisor state=started
   sudo: true

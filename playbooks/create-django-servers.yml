@@ -1,5 +1,5 @@
 ---
-- include: application-pawtrolserver-deploy.yml
 - include: application-breedfeedlaunch-deploy.yml
 - include: application-kromeo2015-deploy.yml
+# - include: application-pawtrolserver-deploy.yml
 - include: application-heyromeo2017-deploy.yml
